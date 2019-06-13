@@ -19,7 +19,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class Main extends JFrame implements ActionListener{
+public class Main extends JFrame implements ActionListener {
 
 	JTextField text = new JTextField();
 	JTextArea textArea;
@@ -27,12 +27,12 @@ public class Main extends JFrame implements ActionListener{
 	
 	JButton send;
 	JButton logoff;
-	JButton[] listB = new JButton[100];
+	public static JButton[] listB = new JButton[100];
 	
 	String room;
 	String computer;
 	String localIp;
-	String baseIp;
+	public static String baseIp;
 	
 	JButton selected;
 	
@@ -71,6 +71,8 @@ public class Main extends JFrame implements ActionListener{
 		init();
 		initInfo();
 		int amount = getAmount();
+		//Force Amount TODO
+		amount = 40;
 		
 		setSize(500,500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -122,13 +124,15 @@ public class Main extends JFrame implements ActionListener{
 		
 		setVisible(true);
 		
-		
+		//Pinging
 		for(int i = 1;  i <= amount ; i++) {
-			if (Ping(String.format("%s%02d", baseIp, i))) {
-				listB[i].setBackground(Color.white);
-			} else {
-				listB[i].setBackground(Color.black);
-			}
+//			if (Ping(String.format("%s%02d", baseIp, i))) {
+//				listB[i].setBackground(Color.white);
+//			} else {
+//				listB[i].setBackground(Color.black);
+//			}
+			Thread th = new Thread(new Pinger(i));
+			th.start();
 		}
 		
 	}
@@ -170,12 +174,13 @@ public class Main extends JFrame implements ActionListener{
 			return 37;
 		case "610":
 		case "725":
+		case "723":
 			return 41;
 		}
 		return 0;
 	}
 	
-	public boolean Ping(String ip) {
+	public static boolean Ping(String ip) {
 		try {
 			InetAddress inetAddress = InetAddress.getByName(ip);
 			return inetAddress.isReachable(5000);
