@@ -63,7 +63,11 @@ public class Main extends JFrame implements ActionListener {
 				
 		} else if (e.getSource() == send) {			
 //			System.out.println(Ping(String.format("%s%s", baseIp, selected.getText())));
-			sendMessage();
+			Integer sendAmount = (Integer) spin.getValue();
+			for(int i = 0; i < sendAmount; i++) {
+				sendMessage();
+//				JOptionPane.showMessageDialog(this, sendAmount);
+			}
 			text.setText("");
 		} else if (e.getSource() == refresh) {
 			pingAll(getAmount());
