@@ -72,7 +72,7 @@ public class Main extends JFrame implements ActionListener {
 		initInfo();
 		int amount = getAmount();
 		//Force Amount TODO
-		amount = 40;
+//		amount = 40;
 		
 		setSize(500,500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
