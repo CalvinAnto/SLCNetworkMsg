@@ -106,9 +106,10 @@ public class Main extends JFrame implements ActionListener {
 		
 		JPanel roomPanel = new JPanel(new GridLayout((amount/4)+1, 4));
 		for (int i = 1; i <= amount; i++) {
-			listB.set(i, new JButton(String.format("%02d", i)));		
-			listB.get(i).addActionListener(this);
-			roomPanel.add(listB.get(i));
+//			listB.set(i, new JButton(String.format("%02d", i)));
+			listB.add(new JButton(String.format("%02d", i)));
+			listB.get(i-1).addActionListener(this);
+			roomPanel.add(listB.get(i-1));
 		}
 		
 		body.add(roomPanel, BorderLayout.CENTER);
@@ -202,7 +203,7 @@ public class Main extends JFrame implements ActionListener {
 	}
 	
 	void pingAll(int amount) {
-		for(int i = 1;  i <= amount ; i++) {
+		for(int i = 0;  i < amount ; i++) {
 //			if (Ping(String.format("%s%02d", baseIp, i))) {
 //				listB[i].setBackground(Color.white);
 //			} else {
