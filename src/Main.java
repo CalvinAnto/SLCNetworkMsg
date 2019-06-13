@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,8 +27,9 @@ public class Main extends JFrame implements ActionListener {
 	JSpinner spin = new JSpinner();
 	
 	JButton send;
+	JButton refresh;
 	JButton logoff;
-	public static JButton[] listB = new JButton[100];
+	public static ArrayList<JButton> listB = new ArrayList<JButton>(100);
 	
 	String room;
 	String computer;
@@ -40,7 +42,8 @@ public class Main extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		
-		if (e.getSource() != send) {			
+		
+		if (listB.contains(e.getSource())) {			
 			JButton click = (JButton) e.getSource();
 			
 			if (selected != null && click.getBackground() != Color.black) {
@@ -55,13 +58,15 @@ public class Main extends JFrame implements ActionListener {
 				selected = (JButton) e.getSource();
 				selected.setBackground(Color.ORANGE);
 			} else {
-				JOptionPane.showMessageDialog(this, "Computer is unaccessible");
+				JOptionPane.showMessageDialog(this, "Computer is inaccessible");
 			}
 				
-		} else {			
+		} else if (e.getSource() == send) {			
 //			System.out.println(Ping(String.format("%s%s", baseIp, selected.getText())));
 			sendMessage();
 			text.setText("");
+		} else if (e.getSource() == refresh) {
+			pingAll(getAmount());
 		}
  		
 	}
@@ -101,9 +106,9 @@ public class Main extends JFrame implements ActionListener {
 		
 		JPanel roomPanel = new JPanel(new GridLayout((amount/4)+1, 4));
 		for (int i = 1; i <= amount; i++) {
-			listB[i] = new JButton(String.format("%02d", i));			
-			listB[i].addActionListener(this);
-			roomPanel.add(listB[i]);
+			listB.set(i, new JButton(String.format("%02d", i)));		
+			listB.get(i).addActionListener(this);
+			roomPanel.add(listB.get(i));
 		}
 		
 		body.add(roomPanel, BorderLayout.CENTER);
@@ -116,24 +121,20 @@ public class Main extends JFrame implements ActionListener {
 		logoff = new JButton("Log Off");
 		logoff.addActionListener(this);
 		
+		refresh = new JButton("Refresh");
+		refresh.addActionListener(this);
+		
 		JPanel btmPanel = new JPanel(new FlowLayout());
 		btmPanel.add(send);
 		btmPanel.add(logoff);
+		btmPanel.add(refresh);
 		
 		add(btmPanel, BorderLayout.SOUTH);
 		
 		setVisible(true);
 		
 		//Pinging
-		for(int i = 1;  i <= amount ; i++) {
-//			if (Ping(String.format("%s%02d", baseIp, i))) {
-//				listB[i].setBackground(Color.white);
-//			} else {
-//				listB[i].setBackground(Color.black);
-//			}
-			Thread th = new Thread(new Pinger(i));
-			th.start();
-		}
+		pingAll(amount);
 		
 	}
 
@@ -197,6 +198,18 @@ public class Main extends JFrame implements ActionListener {
 			Process p = Runtime.getRuntime().exec(cmd);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	void pingAll(int amount) {
+		for(int i = 1;  i <= amount ; i++) {
+//			if (Ping(String.format("%s%02d", baseIp, i))) {
+//				listB[i].setBackground(Color.white);
+//			} else {
+//				listB[i].setBackground(Color.black);
+//			}
+			Thread th = new Thread(new Pinger(i));
+			th.start();
 		}
 	}
 	

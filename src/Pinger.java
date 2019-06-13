@@ -12,9 +12,9 @@ public class Pinger implements Runnable {
 	public void run() {
 		
 		if (Main.Ping(String.format("%s%02d", Main.baseIp, num))) {
-			Main.listB[num].setBackground(Color.white);
+			Main.listB.get(num).setBackground(Color.white);
 		} else {
-			Main.listB[num].setBackground(Color.black);
+			Main.listB.get(num).setBackground(Color.black);
 		}
 		
 	}
