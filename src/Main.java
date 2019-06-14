@@ -179,6 +179,13 @@ public class Main extends JFrame implements ActionListener {
 		case "614":
 			return 37;
 		case "610":
+		case "621":
+		case "623":
+		case "625":
+		case "627":
+		case "629":
+		case "630":
+		case "631":
 		case "725":
 		case "723":
 			return 41;
